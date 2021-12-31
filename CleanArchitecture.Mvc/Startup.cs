@@ -33,6 +33,8 @@ namespace CleanArchitecture.Mvc
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+
+            // Configuring UniversityDbContext for Dependency Injection on Controllers
             services.AddDbContext<UniversityDbContext>(options=> {
                 options.UseSqlServer(
                         Configuration.GetConnectionString("DefaultConnection"));
