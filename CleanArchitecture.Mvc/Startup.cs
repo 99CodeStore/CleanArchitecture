@@ -1,3 +1,4 @@
+using CleanArchitecture.Infrastructure.Data.Context;
 using CleanArchitecture.Mvc.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,8 +33,16 @@ namespace CleanArchitecture.Mvc
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<UniversityDbContext>(options=> {
+                options.UseSqlServer(
+                        Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.ConfigureDefaultIdentity(); // Default Identity Configuration
+
             services.AddControllersWithViews();
         }
 
@@ -51,6 +60,9 @@ namespace CleanArchitecture.Mvc
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.ConfigureExceptionHandler(); // Configure Global Exception Handling and Error Logging.
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
